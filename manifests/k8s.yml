@@ -13,7 +13,7 @@ spec:
         app: kafka-consumer
     spec:
       containers:
-      - image: docker.io/jona2708/kafka-consumer:{github.sha}
+      - image: docker.io/jona2708/pythonconsumer:{github.sha}
         name: kafka-consumer
 #        envFrom:
 #        - configMapRef:
