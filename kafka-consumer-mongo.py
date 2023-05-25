@@ -49,5 +49,23 @@ for msg in consumer:
     except Exception as e:
         print("Could not insert into MongoDB:", e)
 
+    #Create bdnosql_sumary and insert groups into mongodb
+    try:
+        agg_result = db.bdnosql_info.aggregate(
+            [{
+                "$group" :
+                { "_id" : "$name",
+                  "n" : {"$sum": 1}
+                }}
+            ])
+        db.bdnosql_sumary.delete_many({})
+        for i in agg_result:
+            print(i)
+            sumary_id = db.bdnosql_sumary.insert_one(i)
+            print("Sumary inserted with record ids: " ,sumary_id)
+    except Exception as e:
+        print(f'group vy cought {type(e)}: ')
+        print(e)
+
 
 
