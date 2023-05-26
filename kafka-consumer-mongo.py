@@ -54,7 +54,7 @@ for msg in consumer:
         agg_result = db.bdnosql_info.aggregate(
             [{
                 "$group" :
-                { "_id" : "$rectionName",
+                { "_id" : "$reactionName",
                   "n" : {"$sum": 1}
                 }}
             ])
