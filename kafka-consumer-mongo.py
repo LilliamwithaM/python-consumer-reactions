@@ -38,14 +38,14 @@ consumer = KafkaConsumer('test',bootstrap_servers=['my-kafka-0.my-kafka-headless
 for msg in consumer:
     record = json.loads(msg.value)
     print(record)
-    name = record["name"]
+    reactionName = record["reactionName"]
 
     # Create dictionary and ingest data into MongoDB
     try:
-       meme_rec = {'name':name }
-       print (meme_rec)
-       meme_id = db.bdnosql_info.insert_one(meme_rec)
-       print("Data inserted with record ids", meme_id)
+       reaction_rec = {'reactionName':reactionName }
+       print (reaction_rec)
+       reaction_id = db.bdnosql_info.insert_one(reaction_rec)
+       print("Data inserted with record ids", reaction_id)
     except Exception as e:
         print("Could not insert into MongoDB:", e)
 
@@ -54,7 +54,7 @@ for msg in consumer:
         agg_result = db.bdnosql_info.aggregate(
             [{
                 "$group" :
-                { "_id" : "$name",
+                { "_id" : "$rectionName",
                   "n" : {"$sum": 1}
                 }}
             ])
