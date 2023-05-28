@@ -59,21 +59,21 @@ for msg in consumer:
     # Create bdnosql_sumary and insert groups into mongodb
     try:
         agg_result = db.bdnosql_reactions.aggregate([
-            {
-                "$group": {
-                    "_id": {
-                        "objectId": "$objectId",
-                        "reactionId": "$reactionId"
-                    },
-                    "n": {"$sum": 1}
-                }
+        {
+            "$group": {
+                "_id": {
+                    "objectId": "$objectId",
+                    "reactionId": "$reactionId"
+                },
+                "n": {"$sum": 1}
             }
-        ])
-        db.bdnosql_reactionsClip.delete_many({})
+        }
+    ])
+        db.bdnosql_sumaryReactions.delete_many({})
         for i in agg_result:
             print(i)
-            sumary_id = db.bdnosql_reactionsClips.insert_one(i)
-            print("reactionsClip inserted with record ids: ", sumary_id)
+            sumary_id = db.bdnosql_sumaryReactions.insert_one(i)
+            print("Sumary Reactions inserted with record ids: ", sumary_id)
     except Exception as e:
         print(f'group vy cought {type(e)}: ')
         print(e)
