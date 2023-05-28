@@ -34,7 +34,7 @@ except:
 
 
 consumer = KafkaConsumer('reactions', bootstrap_servers=[
-                         'my-kafka-0.my-kafka-headless.jona27081.svc.cluster.local:9092'])
+'my-kafka-0.my-kafka-headless.jona27081.svc.cluster.local:9092'])
 # Parse received data from Kafka
 for msg in consumer:
     record = json.loads(msg.value)
@@ -51,14 +51,14 @@ for msg in consumer:
             'reactionId': reactionId
         }
         print(reaction_rec)
-        reaction_id = db.bdnosql_info.insert_one(reaction_rec)
+        reaction_id = db.bdnosql_reactions.insert_one(reaction_rec)
         print("Data inserted with record ids", reaction_id)
     except Exception as e:
         print("Could not insert into MongoDB:", e)
 
     # Create bdnosql_sumary and insert groups into mongodb
     try:
-        agg_result = db.bdnosql_info.aggregate([
+        agg_result = db.bdnosql_reactions.aggregate([
             {
                 "$group": {
                     "_id": {
@@ -69,11 +69,11 @@ for msg in consumer:
                 }
             }
         ])
-        db.bdnosql_sumary.delete_many({})
+        db.bdnosql_reactionsClip.delete_many({})
         for i in agg_result:
             print(i)
-            sumary_id = db.bdnosql_sumary.insert_one(i)
-            print("Sumary inserted with record ids: ", sumary_id)
+            sumary_id = db.bdnosql_reactionsClips.insert_one(i)
+            print("reactionsClip inserted with record ids: ", sumary_id)
     except Exception as e:
         print(f'group vy cought {type(e)}: ')
         print(e)
